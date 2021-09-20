@@ -6,14 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.doodle.customview.DoodleView
 
 class MainActivity: AppCompatActivity() {
+    var doodleView: DoodleView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_layout)
-        val doodleView = findViewById<DoodleView>(R.id.doodleView)
+         doodleView = findViewById(R.id.doodleView)
     }
 
 
-    fun onSave(view: View) {
-
+    fun onRubberClick(view: View) {
+        doodleView?.enableRubber()
     }
 }
