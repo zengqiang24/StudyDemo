@@ -8,17 +8,26 @@ import android.view.MotionEvent
 import android.view.MotionEvent.*
 import android.view.View
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.sqrt
 
 private const val TAG = "DoodleView"
+private const val RUBBER_RADIUS = 30f
 
 class DoodleView : View, IDoodle {
-    private var _x = 0f
-    private var _y = 0f
+    private var rubberPressed: Boolean = false
+    private var _rubberX = 0f
+    private var _rubberY = 0f
     private val actionMap: LinkedHashMap<Int, Edge> = LinkedHashMap()
     private var seq = 0
-    var prePoint: Point? = null
+    private var prePoint: Point? = null
     private var enableRubber = false
     private var rubberMoveListeners = CopyOnWriteArrayList<OnRubberMoveListener>()
+    private var _rubberPaint = Paint().apply {
+        this.strokeWidth = 10f
+        this.color = Color.GRAY
+        this.style = Paint.Style.FILL
+        this.isAntiAlias = true
+    }
     private val _paint: Paint = Paint().apply {
         this.isAntiAlias = true
         this.style = Paint.Style.STROKE
@@ -40,53 +49,47 @@ class DoodleView : View, IDoodle {
     }
 
     override fun changePaintColor(color: Int) {
+
     }
 
     override fun revert() {
-        val edgeRemoved = actionMap.remove(seq--)
-        edgeRemoved?.let { removeRubberMoveListener(it) }
-        invalidate()
+        actionMap.remove(seq--)?.let {
+            removeRubberMoveListener(it)
+            invalidate()
+        }
     }
 
-    override fun revert(edgeId: Int) {
-        val edgeRemoved = actionMap.remove(edgeId)
-        edgeRemoved?.let { removeRubberMoveListener(it) }
-        invalidate()
+    override fun removeEdge(edgeId: Int) {
+        actionMap.remove(edgeId)?.let {
+            removeRubberMoveListener(it)
+            invalidate()
+        }
     }
 
     override fun enableRubber() {
         enableRubber = !enableRubber
+        if (!enableRubber) {
+            invalidate()
+        }
         Log.d(TAG, "enableRubber() called enableRubber = $enableRubber")
-    }
-
-    override fun onDrawForeground(canvas: Canvas?) {
-        super.onDrawForeground(canvas)
-        Log.d(TAG, "onDrawForeground() called with: canvas = $canvas")
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         event?.let {
-
             if (enableRubber) {
-                if (event.action == ACTION_MOVE
-                    || event.action == ACTION_DOWN
-                ) {
-                    notifyRubberMoves(event.x, event.y)
-                }
+                rubberPressed = event.action == ACTION_MOVE || event.action == ACTION_DOWN
+                updateRubberLocation(event)
             } else {
                 var edge: Edge? = null
                 when (event.action) {
                     ACTION_DOWN -> {
-                        if (edge == null) {
-                            edge = Edge(++seq, this)
-                        }
-                        actionMap.put(++seq, edge)
+                        ++seq
+                        if (edge == null) edge = Edge(seq, this)
+                        actionMap[seq] = edge
                         addRubberMoveListener(edge)
-
                     }
                     ACTION_MOVE -> {
-                        edge = actionMap.get(seq)!!
-                        edge.addPoint(Point(event.x.toInt(), event.y.toInt()))
+                        actionMap[seq]?.addPoint(Point(event.x.toInt(), event.y.toInt()))
                         invalidate()
                     }
                     else -> {
@@ -94,7 +97,14 @@ class DoodleView : View, IDoodle {
                 }
             }
         }
-        return true
+        return false
+    }
+
+    private fun updateRubberLocation(event: MotionEvent) {
+        _rubberX = event.x
+        _rubberY = event.y
+        invalidate()
+        notifyRubberMoves(event.x, event.y)
     }
 
     private fun addRubberMoveListener(edge: Edge) {
@@ -114,7 +124,9 @@ class DoodleView : View, IDoodle {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.run {
-            Log.d(TAG, "onDraw: _x = $_x + _y= $_y")
+            if (enableRubber && rubberPressed) {
+                drawCircle(_rubberX, _rubberY, RUBBER_RADIUS, _rubberPaint)
+            }
             for (entry in actionMap.entries) {
                 prePoint = null
                 for (point in entry.value.points) {
@@ -136,20 +148,24 @@ class DoodleView : View, IDoodle {
     }
 }
 
-class Edge(var id: Int, var view: IDoodle) : OnRubberMoveListener {
+private class Edge(var id: Int, var doodleView: IDoodle) : OnRubberMoveListener {
     var points: ArrayList<Point> = ArrayList()
+
     fun addPoint(point: Point) {
         points.add(point)
     }
 
     override fun update(x: Int, y: Int) {
         for (point in points) {
-            if (point.x == x && point.y == y) {
-                view.revert(id)
+            val diffx = point.x - x
+            val diffy = point.y - y
+            val diff = sqrt((diffx * diffx + diffy * diffy).toDouble())
+            if (diff <= RUBBER_RADIUS) { //todo 有时候橡皮擦相交了也没有删除画线
+                Log.d(TAG, "橡皮擦和画线相交了   x = $x, y = $y diff = $diff")
+                doodleView.removeEdge(id)
             }
         }
     }
-
 }
 
 interface OnRubberMoveListener {
@@ -161,6 +177,6 @@ interface IDoodle {
     fun generateCombinedImage(): Bitmap?
     fun changePaintColor(color: Int)
     fun revert()
-    fun revert(edgeId: Int)
+    fun removeEdge(edgeId: Int)
     fun enableRubber()
 }
