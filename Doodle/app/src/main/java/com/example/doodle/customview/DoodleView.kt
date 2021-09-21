@@ -97,7 +97,7 @@ class DoodleView : View, IDoodle {
                 }
             }
         }
-        return false
+        return true
     }
 
     private fun updateRubberLocation(event: MotionEvent) {
