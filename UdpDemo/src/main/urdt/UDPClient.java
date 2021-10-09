@@ -1,4 +1,4 @@
-package baselevel;
+package main.urdt;
 
 import java.io.IOException;
 import java.net.*;
@@ -10,13 +10,11 @@ public class UDPClient {
         byte[] bytes = new byte[4048];
         byte[] bytes1 = hi.getBytes();
         System.arraycopy(bytes1,0, bytes,0, bytes1.length);
-        InetAddress localHost = null;
         try {
-            localHost = Inet4Address.getLocalHost();
             DatagramPacket packet = new DatagramPacket(bytes,  //创建分组，并设置目的地址
                     0,
                     bytes.length,
-                    localHost,
+                    Inet4Address.getLocalHost(),
                     12000);
             clientSocket.send(packet);
             System.out.println("发送报文分组至" + packet.getAddress().getHostAddress() + ":" + packet.getPort());
