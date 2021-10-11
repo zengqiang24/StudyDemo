@@ -1,15 +1,15 @@
 package main.rdt1
 
+import main.base.makePacket
 import java.io.File
 import java.io.FileOutputStream
-import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
 fun main() {
     val serverSocket = DatagramSocket(12000, InetAddress.getLocalHost())
-    var file = File("src/resource","newFile.JPG")
-    if(file.createNewFile()){
+    var file = File("src/resource", "newFile.JPG")
+    if (file.createNewFile()) {
         println("file created")
     } else {
         println("file already created")
@@ -17,21 +17,17 @@ fun main() {
     println("server started...")
     var outputStream = FileOutputStream(file)
     while (true) {
-        val byteArray = ByteArray(1024)
-        DatagramPacket(
-            byteArray,
-            0,
-            byteArray.size
-        ).run {
+        val data = ByteArray(1024)
+        makePacket(data).run {
             serverSocket.receive(this)
-            if(!file.exists()){
+            serverSocket.send(this)
+            if (!file.exists()) {
                 file.createNewFile()
                 outputStream = FileOutputStream(file)
             }
-            println("receive bytes = ${byteArray.size}")
-            outputStream.write(byteArray)
+            println("receive bytes = ${data.size}")
+            outputStream.write(data)
             outputStream.flush()
         }
-
     }
 }

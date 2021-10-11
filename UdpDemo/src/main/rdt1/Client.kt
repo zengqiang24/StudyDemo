@@ -1,11 +1,11 @@
 package main.rdt1
 
-import main.base.Entity
+import main.base.makePacket
+import main.base.makeSendPacket
+import main.base.rdtSend
 import java.io.File
 import java.io.FileInputStream
-import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.net.InetAddress
 
 /**
  * 假设底层信道是可靠的，接收端不会丢失任何数据。
@@ -32,14 +32,3 @@ fun main() {
     }
 }
 
-fun rdtSend(socket: DatagramSocket, bytes: ByteArray) {
-    //打包成数据报发送给接收端
-    DatagramPacket(
-        bytes,
-        1024,
-        InetAddress.getLocalHost(),
-        12000
-    ).also {
-        socket.send(it)
-    }
-}

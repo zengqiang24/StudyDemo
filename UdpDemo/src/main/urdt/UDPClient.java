@@ -33,7 +33,7 @@ public class UDPClient {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             clientSocket.close();
         }
     }
