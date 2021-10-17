@@ -46,9 +46,15 @@ fun rdtSend(
     socket: DatagramSocket,
     bytes: ByteArray
 ) {
-    //打包成数据报发送给接收端
+    //打包成数据报（seq+ack+body)发送给接收端
+    //put seq into bytes = 0 //位于第一个字节
+    //put ack int bytes ack = seq+ data.length //第二个字节 ack为下次接收到的序列号
     makeSendPacket(bytes)
         .run {
             socket.send(this)
         }
 }
+
+
+
+
