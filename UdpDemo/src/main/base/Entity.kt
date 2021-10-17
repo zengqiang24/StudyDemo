@@ -1,8 +1,7 @@
 package main.base
-data class Entity(var seq: Int, var ack: Int, var content: String) {
 
+data class Entity(var seq: Int, var ack: Int, var content: String)
 
-}
 fun Entity.encode(): ByteArray {
     var byteArray = ByteArray(2 + 1022)
     var seqByte = seq.toByte()
@@ -16,7 +15,7 @@ fun Entity.encode(): ByteArray {
     return byteArray
 }
 
-fun Entity.decode(byteArray: ByteArray) : Entity{
+fun Entity.decode(byteArray: ByteArray): Entity {
     val seqByte = byteArray[0]
     seq = seqByte.toInt()
     val ackByte = byteArray[1]
@@ -28,7 +27,7 @@ fun Entity.decode(byteArray: ByteArray) : Entity{
 
 //Test encode() and decode()
 fun main() {
-    val entity = Entity(1,5,"hello")
+    val entity = Entity(1, 5, "hello")
     val buf = entity.encode()
     println("encode = ${entity.encode()}")
 
