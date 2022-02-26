@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-02-26T03:18:37.452Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36" etag="GRDPUaGUOZVV3lcnjLUq" version="16.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2022-02-26T03:25:08.016Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36" etag="zdKbGmd4wboWeKzICIgg" version="16.6.4" type="github">
   <diagram name="Page-1" id="b5b7bab2-c9e2-2cf4-8b2a-24fd1a2a6d21">
-    <mxGraphModel dx="946" dy="522" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="946" dy="465" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -10,13 +10,13 @@
         <mxCell id="h8ric6eq4_0q_f88uzo2-8" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="h8ric6eq4_0q_f88uzo2-12">
           <mxGeometry x="122" y="140" width="470" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="h8ric6eq4_0q_f88uzo2-2" value="Analyzer（卡顿分析器）：复杂卡顿的监控和信息采集&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="h8ric6eq4_0q_f88uzo2-12">
+        <mxCell id="h8ric6eq4_0q_f88uzo2-2" value="Analyzer（卡顿分析器）：负责卡顿的监控和信息采集&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="h8ric6eq4_0q_f88uzo2-12">
           <mxGeometry x="129.5" y="325" width="472.5" height="145" as="geometry" />
         </mxCell>
         <mxCell id="h8ric6eq4_0q_f88uzo2-3" value="SDK-Shell : 代理分析器：完成SDK的配置和初始化" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="h8ric6eq4_0q_f88uzo2-12">
           <mxGeometry x="392" y="195" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="h8ric6eq4_0q_f88uzo2-4" value="UI页面：Activity和Notification" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="h8ric6eq4_0q_f88uzo2-12">
+        <mxCell id="h8ric6eq4_0q_f88uzo2-4" value="UI页面：显示卡顿事件信息" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="h8ric6eq4_0q_f88uzo2-12">
           <mxGeometry x="222" y="195" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="h8ric6eq4_0q_f88uzo2-7" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="h8ric6eq4_0q_f88uzo2-12" source="h8ric6eq4_0q_f88uzo2-4" target="h8ric6eq4_0q_f88uzo2-3">
